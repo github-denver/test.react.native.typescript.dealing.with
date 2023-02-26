@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import {format, formatDistanceToNow} from 'date-fns';
 import {ko} from 'date-fns/locale';
 import React from 'react';
@@ -32,6 +33,13 @@ function truncate(text) {
 
 function FeedListItem({log}) {
   const {title, body, date} = log; // 사용하기 편하게 객체 구조 분해 할당
+  const navigation = useNavigation();
+
+  const onPress = () => {
+    navigation.navigate('Write', {
+      log,
+    });
+  };
 
   return (
     <Pressable
@@ -39,7 +47,8 @@ function FeedListItem({log}) {
         styles.block,
         Platform.OS === 'ios' && pressed && {backgroundColor: 'efefef'},
       ]}
-      android_ripple={{color: '#ededed'}}>
+      android_ripple={{color: '#ededed'}}
+      onPress={onPress}>
       {/* <Text style={styles.date}>{new Date(date).toLocaleString()}</Text> */}
       <Text style={styles.date}>{formatDate(date)}</Text>
       <Text style={styles.title}>{title}</Text>

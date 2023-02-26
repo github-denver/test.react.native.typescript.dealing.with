@@ -2,14 +2,8 @@ import React from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import FeedListItem from './FeedListItem';
 
-function FeedList({logs, onScrolledToBottom}) {
-  console.group('function FeedList({logs}) { .. }');
-  // console.log('logs: ', logs);
-
+function FeedList({logs, onScrolledToBottom, ListHeaderComponent}) {
   const onScroll = (event) => {
-    console.group('const onScroll = (event) => { .. }');
-    // console.log('event: ', event);
-
     if (!onScrolledToBottom) {
       return;
     }
@@ -38,10 +32,7 @@ function FeedList({logs, onScrolledToBottom}) {
 
       onScrolledToBottom(false);
     }
-    console.groupEnd();
   };
-
-  console.groupEnd();
 
   return (
     <FlatList
@@ -51,6 +42,7 @@ function FeedList({logs, onScrolledToBottom}) {
       keyExtractor={(log) => log.id}
       ItemSeparatorComponent={() => <View style={styles.separator} />}
       onScroll={onScroll}
+      ListHeaderComponent={ListHeaderComponent}
     />
   );
 }

@@ -1,25 +1,61 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useContext, useState} from 'react';
-import {KeyboardAvoidingView, Platform, StyleSheet} from 'react-native';
+import {Alert, KeyboardAvoidingView, Platform, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import WriteEditor from '../components/WriteEditor';
 import WriteHeader from '../components/WriteHeader';
 import LogContext from '../contexts/LogContext';
 
-function WriteScreen() {
-  const [title, setTitle] = useState();
-  const [body, setBody] = useState();
-  const navigation = useNavigation();
+function WriteScreen({route}) {
+  const log = route.params?.log;
 
-  const {onCreate} = useContext(LogContext);
+  const [title, setTitle] = useState(log?.title ?? '');
+  const [body, setBody] = useState(log?.body ?? '');
+  const navigation = useNavigation();
+  const [date, setDate] = useState(log ? new Date(log.date) : new Date());
+
+  const {onCreate, onModify, onRemove} = useContext(LogContext);
   const onSave = () => {
-    onCreate({
-      title,
-      body,
-      // 날짜를 문자열로 변환
-      date: new Date().toISOString(),
-    });
+    if (log) {
+      onModify({
+        id: log.id,
+        date: date.toISOString(),
+        title,
+        body,
+      });
+    } else {
+      onCreate({
+        title,
+        body,
+        // 날짜를 문자열로 변환
+        date: date.toISOString(),
+      });
+    }
+
     navigation.pop(); // 이전 화면으로 되돌아갑니다.
+  };
+
+  const onAskRemove = () => {
+    Alert.alert(
+      '삭제',
+      '정말로 삭제하시겠어요?',
+
+      [
+        {text: '취소', style: 'cancel'},
+        {
+          text: '삭제',
+          onPress: () => {
+            onRemove(log?.id);
+
+            navigation.pop();
+          },
+          style: 'destructive',
+        },
+      ],
+      {
+        cancelable: true,
+      },
+    );
   };
 
   return (
@@ -27,7 +63,13 @@ function WriteScreen() {
       <KeyboardAvoidingView
         style={styles.avoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <WriteHeader onSave={onSave} />
+        <WriteHeader
+          onSave={onSave}
+          onAskRemove={onAskRemove}
+          isEditing={!!log}
+          date={date}
+          onChangeDate={setDate}
+        />
         <WriteEditor
           title={title}
           body={body}

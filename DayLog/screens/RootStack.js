@@ -16,7 +16,7 @@ function RootStack() {
         }}
       />
       <Stack.Screen
-        name="WriteScreen"
+        name="Write"
         component={WriteScreen}
         options={{
           headerShown: false,

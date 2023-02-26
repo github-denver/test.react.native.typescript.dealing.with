@@ -7,7 +7,7 @@ function FloatingWriteButton({hidden}) {
   const navigation = useNavigation();
 
   const onPress = () => {
-    navigation.navigate('WriteScreen');
+    navigation.navigate('Write');
   };
 
   const animation = useRef(new Animated.Value(0)).current;

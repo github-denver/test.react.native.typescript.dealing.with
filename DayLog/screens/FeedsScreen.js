@@ -6,7 +6,7 @@ import LogContext from '../contexts/LogContext';
 
 function FeedsScreen() {
   const {logs} = useContext(LogContext);
-  console.log('logs: ', JSON.stringify(logs, null, 2));
+  console.log('[FeedsScreen.js] logs: ', JSON.stringify(logs, null, 2));
 
   const [hidden, setHidden] = useState(false);
 
