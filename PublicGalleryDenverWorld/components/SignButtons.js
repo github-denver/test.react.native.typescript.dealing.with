@@ -4,6 +4,8 @@ import CustomButton from './CustomButton';
 import {useNavigation} from '@react-navigation/native';
 
 function SignButtons({isSignUp, onSubmit, loading}) {
+  console.log('isSignUp: ', isSignUp);
+
   const navigation = useNavigation();
 
   const primaryTitle = isSignUp ? '회원가입' : '로그인';
@@ -11,6 +13,8 @@ function SignButtons({isSignUp, onSubmit, loading}) {
 
   const onSecondaryButtonPress = () => {
     if (isSignUp) {
+      console.log('navigation.goBack() 호출');
+
       navigation.goBack();
     } else {
       navigation.push('SignIn', {isSignUp: true});
