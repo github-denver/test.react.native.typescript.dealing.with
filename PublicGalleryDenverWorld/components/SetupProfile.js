@@ -13,6 +13,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {useUserContext} from '../contexts/UserContext';
 import {signOut} from '../lib/auth';
 import {createUser} from '../lib/users';
+import Avatar from './Avatar';
 import BorderedInput from './BorderedInput';
 import CustomButton from './CustomButton';
 
@@ -37,12 +38,8 @@ function SetupProfile() {
     if (response) {
       const asset = response.assets[0];
       const extension = asset.fileName.split('.').pop(); // 확장자 추출
-      console.log('extension: ', extension);
-
       const reference = storage().ref(`/profile/${uid}.${extension}`);
-      console.log('reference: ', reference);
 
-      console.log('Platform.OS: ', Platform.OS);
       if (Platform.OS === 'android') {
         await reference.putString(asset.base64, 'base64', {
           contentType: asset.type,
@@ -52,7 +49,6 @@ function SetupProfile() {
       }
 
       photoURL = response ? await reference.getDownloadURL() : null;
-      console.log('photoURL: ', photoURL);
     }
 
     const user = {
@@ -60,7 +56,6 @@ function SetupProfile() {
       displayName,
       photoURL,
     };
-    console.log('user: ', user);
 
     createUser(user);
     setUser(user);
@@ -80,8 +75,6 @@ function SetupProfile() {
         includeBase64: Platform.OS === 'android', // false
       },
       resObj => {
-        // console.log('const onSelectImage = () => { .. } → Response Object: ', resObj);
-
         if (resObj.didCancel) {
           console.log('취소했어요.');
 
@@ -89,8 +82,6 @@ function SetupProfile() {
         }
 
         setResponse(resObj);
-
-        console.log('response: ', response);
       },
     );
   };
@@ -98,13 +89,10 @@ function SetupProfile() {
   return (
     <View style={styles.block}>
       <Pressable style={styles.circle} onPress={onSelectImage}>
-        <Image
+        <Avatar
+          source={response && {uri: response.uri}}
+          size={128}
           style={styles.circle}
-          source={
-            response
-              ? {uri: response?.assets[0]?.uri}
-              : require('../assets/user.png')
-          }
         />
       </Pressable>
 
@@ -142,9 +130,6 @@ const styles = StyleSheet.create({
   },
   circle: {
     backgroundColor: '#cdcdcd',
-    borderRadius: 64,
-    width: 128,
-    height: 128,
   },
   form: {
     marginTop: 16,

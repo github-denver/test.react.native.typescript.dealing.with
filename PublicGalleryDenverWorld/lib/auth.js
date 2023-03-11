@@ -9,10 +9,6 @@ export function signUp({email, password}) {
 }
 
 export function subscribeAuth(callback) {
-  console.group('export function subscribeAuth(callback) { .. }');
-  console.log('callback: ', callback);
-  console.groupEnd();
-
   return auth().onAuthStateChanged(callback);
 }
 

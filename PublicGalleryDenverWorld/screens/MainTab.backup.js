@@ -3,11 +3,7 @@ import {StyleSheet, View, Text, Image} from 'react-native';
 import {useUserContext} from '../contexts/UserContext';
 
 function MainTab() {
-  console.group('function MainTab() { .. }');
-
   const {user} = useUserContext();
-  console.log('user: ', user);
-  console.groupEnd();
 
   return (
     <View style={styles.block}>

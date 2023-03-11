@@ -35,7 +35,6 @@ function SignInScreen({navigation, route}) {
 
   const onSubmit = async () => {
     Keyboard.dismiss();
-    console.log('form: ', form);
 
     const {email, password, confirmPassword} = form;
 
@@ -47,28 +46,22 @@ function SignInScreen({navigation, route}) {
     }
 
     const info = {email, password};
-    console.log('info: ', info);
 
     setLoading(true);
 
     try {
       const {user} = isSignUp ? await signUp(info) : await signIn(info);
-      console.log('user: ', user);
-      console.log('user.uid: ', user.uid);
 
       const profile = await getUser(user.uid);
-      console.log('profile: ', profile);
 
       if (!profile) {
         navigation.navigate('Welcome', {uid: user.uid});
       } else {
-        console.log('프로필이 존재하는 계정이기 때문에 setUser를 호출합니다.');
-
+        // 프로필이 존재하는 계정이기 때문에 setUser를 호출합니다.
         setUser(profile);
       }
     } catch (error) {
       console.error(error);
-      console.log('error.code: ', error.code);
 
       const message = {
         'auth/email-already-in-use': '이미 가입된 이메일이에요.',
@@ -78,10 +71,7 @@ function SignInScreen({navigation, route}) {
         'auth/weak-password': '암호는 6자 이상이어야 해요',
       };
 
-      console.log(`error message: ${message[error.code]}`);
-
       const msg = message[error.code] || `${isSignUp ? '가입' : '로그인'} 실패`;
-      console.log('msg: ', msg);
 
       Alert.alert('실패', msg);
     } finally {

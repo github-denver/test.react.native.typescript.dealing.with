@@ -3,11 +3,7 @@ import React, {useContext, createContext, useState} from 'react';
 const UserContext = createContext(null);
 
 export function UserContextProvider({children}) {
-  console.group('export function UserContextProvider({children}) { .. }');
-
   const [user, setUser] = useState(null);
-  console.log('user: ', {user});
-  console.groupEnd();
 
   return (
     <UserContext.Provider
