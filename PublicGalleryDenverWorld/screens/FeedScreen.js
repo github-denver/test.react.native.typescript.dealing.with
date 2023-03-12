@@ -5,12 +5,21 @@ import {
   RefreshControl,
   StyleSheet,
 } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 import PostCard from '../components/PostCard';
 import usePosts from '../hooks/usePosts';
 
 function FeedScreen() {
   const {posts, noMorePost, refreshing, onLoadMore, onRefresh, removePost} =
     usePosts();
+
+  const postsReady = posts !== null;
+
+  useEffect(() => {
+    if (postsReady) {
+      SplashScreen.hide();
+    }
+  }, [postsReady]);
 
   return (
     <FlatList
